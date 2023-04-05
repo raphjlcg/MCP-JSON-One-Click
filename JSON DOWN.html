@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Download Firebase JSON</title>
+</head>
+<body>
+
+	<h1>MCP Download Firebase JSON</h1>
+
+	<button onclick="downloadFirebaseData()">Download JSON</button>
+
+	<script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+	<script>
+		// Initialize Firebase
+		var firebaseConfig = {
+        apiKey: "AIzaSyCJj93BRFrqRAuuXA4TkZIiwd5DnCi5VPg",
+    authDomain: "firetestnine.firebaseapp.com",
+    databaseURL: "https://firetestnine-default-rtdb.firebaseio.com",
+    projectId: "firetestnine",
+    storageBucket: "firetestnine.appspot.com",
+    messagingSenderId: "482828973727",
+    appId: "1:482828973727:web:1d1aeeba2f906a659894aa",
+    measurementId: "G-VHF3LSZGN7"
+		};
+		firebase.initializeApp(firebaseConfig);
+
+		// Create a Firestore reference
+		var db = firebase.firestore();
+
+		// Function to download Firebase data as JSON
+		function downloadFirebaseData() {
+			// Query the Firestore collection
+			db.collection("testnine").get().then(function(querySnapshot) {
+				// Create an array to store the data
+				var data = [];
+
+				// Iterate over each document and add it to the array
+				querySnapshot.forEach(function(doc) {
+					data.push(doc.data());
+				});
+
+				// Convert the data to JSON
+				var json = JSON.stringify(data);
+
+				// Create a Blob object from the JSON data
+				var blob = new Blob([json], {type: "application/json"});
+
+				// Create a download link for the Blob
+				var link = document.createElement("a");
+				link.download = "firebase-data.json";
+				link.href = URL.createObjectURL(blob);
+
+				// Click the link to trigger the download
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			});
+		}
+	</script>
+
+</body>
+</html>
